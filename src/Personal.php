@@ -18,16 +18,16 @@ use EthereumRPC\Exception\GethException;
 use HttpClient\Response\JSONResponse;
 
 /**
- * Class Accounts
+ * Class Personal
  * @package EthereumRPC
  */
-class Accounts
+class Personal
 {
     /** @var EthereumRPC */
     private $client;
 
     /**
-     * Accounts constructor.
+     * Personal constructor.
      * @param EthereumRPC $ethereum
      */
     public function __construct(EthereumRPC $ethereum)

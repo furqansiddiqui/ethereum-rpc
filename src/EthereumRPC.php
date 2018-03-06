@@ -33,8 +33,10 @@ class EthereumRPC
     /** @var bool */
     private $ssl;
 
-    /** @var Accounts */
-    private $accounts;
+    /** @var Eth */
+    private $eth;
+    /** @var Personal */
+    private $personal;
 
     /**
      * Ethereum constructor.
@@ -46,15 +48,24 @@ class EthereumRPC
         $this->host = $host;
         $this->port = $port;
         $this->ssl = false;
-        $this->accounts = new Accounts($this);
+        $this->eth = new Eth($this);
+        $this->personal = new Personal($this);
     }
 
     /**
-     * @return Accounts
+     * @return Eth
      */
-    public function accounts(): Accounts
+    public function eth(): Eth
     {
-        return $this->accounts;
+        return $this->eth;
+    }
+
+    /**
+     * @return Personal
+     */
+    public function personal(): Personal
+    {
+        return $this->personal;
     }
 
     /**
