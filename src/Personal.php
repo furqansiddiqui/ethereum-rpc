@@ -61,7 +61,7 @@ class Personal
         $account = $request->get("result");
         if (!is_string($account)) {
             throw GethException::unexpectedResultType("personal_newAccount", "string", gettype($account));
-        } elseif (!preg_match('/[0x]?[a-f0-9]{40,42}/', $account)) {
+        } elseif (!preg_match('/^(0x)?[a-f0-9]{40,42}$/', $account)) {
             throw new GethException('Invalid newly created ETH address');
         }
 
