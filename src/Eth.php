@@ -50,4 +50,35 @@ class Eth
 
         return hexdec($blockNumber);
     }
+
+
+    /**
+     * @return array
+     * @throws Exception\ConnectionException
+     * @throws GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function accounts(): array
+    {
+        $request = $this->client->jsonRPC("eth_accounts");
+        $list = $request->get("result");
+        if (!is_array($list)) {
+            throw GethException::unexpectedResultType("eth_accounts", "array", gettype($list));
+        }
+
+        return $list;
+    }
+
+    /**
+     * Alias of accounts() method
+     *
+     * @return array
+     * @throws Exception\ConnectionException
+     * @throws GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function list(): array
+    {
+        return $this->accounts();
+    }
 }
