@@ -67,4 +67,31 @@ class Personal
 
         return $account;
     }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @param string $ethAmount
+     * @param string $password
+     * @return string
+     * @throws Exception\ConnectionException
+     * @throws GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function sendEthereum(string $from, string $to, string $ethAmount, string $password): string
+    {
+        $transaction = [
+            "from" => $from,
+            "to" => $to,
+            "value" => "0x" . dechex(intval(bcmul($ethAmount, bcpow("10", "18"), 0))) // Convert ETH to WEI
+        ];
+
+        $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
+        $send = $request->get("result");
+        if (!is_string($send)) {
+            throw GethException::unexpectedResultType("personal_sendTransaction", "string", gettype($send));
+        }
+
+        return $send;
+    }
 }
