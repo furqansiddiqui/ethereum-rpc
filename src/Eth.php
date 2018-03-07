@@ -44,7 +44,7 @@ class Eth
     {
         $request = $this->client->jsonRPC("eth_blockNumber");
         $blockNumber = $request->get("result");
-        if (!is_string($blockNumber) || !ctype_xdigit($blockNumber)) {
+        if (!is_string($blockNumber) || !preg_match('/^(0x)?[a-f0-9]{2,}$/', $blockNumber)) {
             throw GethException::unexpectedResultType("eth_blockNumber", "hexadec", gettype($blockNumber));
         }
 
