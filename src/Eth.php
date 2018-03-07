@@ -81,4 +81,22 @@ class Eth
     {
         return $this->accounts();
     }
+
+    /**
+     * @param string $txId
+     * @return array
+     * @throws Exception\ConnectionException
+     * @throws GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function getTransaction(string $txId): array
+    {
+        $request = $this->client->jsonRPC("eth_getTransactionByHash", null, [$txId]);
+        $transaction = $request->get("result");
+        if (!is_array($transaction)) {
+            throw GethException::unexpectedResultType("eth_getTransactionByHash", "array", gettype($transaction));
+        }
+
+        return $transaction;
+    }
 }
