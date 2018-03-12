@@ -26,6 +26,9 @@ use HttpClient\Response\JSONResponse;
  */
 class EthereumRPC
 {
+    public const VERSION = "1.16.1";
+    public const SCALE = 8;
+
     /** @var string */
     private $host;
     /** @var int */
