@@ -99,4 +99,24 @@ class Eth
 
         return $transaction;
     }
+
+    /**
+     * @param string $account
+     * @param string $scope
+     * @return string
+     * @throws Exception\ConnectionException
+     * @throws GethException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function getBalance(string $account, string $scope = "latest"): string
+    {
+        $request = $this->client->jsonRPC("eth_getBalance", null, [$account, $scope]);
+        $balance = $request->get("result");
+        if (!is_string($balance) || !preg_match('/^(0x)?[a-f0-9]+$/', $balance)) {
+            throw GethException::unexpectedResultType("eth_getBalance", "hexdec", gettype($balance));
+        }
+
+        $balance = strval(hexdec($balance));
+        return bcmul($balance, "1", EthereumRPC::SCALE);
+    }
 }
