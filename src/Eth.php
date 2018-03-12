@@ -117,6 +117,6 @@ class Eth
         }
 
         $balance = strval(hexdec($balance));
-        return bcmul($balance, "1", EthereumRPC::SCALE);
+        return bcdiv($balance, bcpow("10", "18", 0), EthereumRPC::SCALE);
     }
 }
