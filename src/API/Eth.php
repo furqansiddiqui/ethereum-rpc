@@ -17,6 +17,7 @@ namespace EthereumRPC\API;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use EthereumRPC\Response\Block;
+use EthereumRPC\Response\Transaction;
 
 /**
  * Class Eth
@@ -107,12 +108,13 @@ class Eth
 
     /**
      * @param string $txId
-     * @return array
+     * @return Transaction
      * @throws GethException
      * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ResponseObjectException
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function getTransaction(string $txId): array
+    public function getTransaction(string $txId): Transaction
     {
         $request = $this->client->jsonRPC("eth_getTransactionByHash", null, [$txId]);
         $transaction = $request->get("result");
@@ -120,7 +122,7 @@ class Eth
             throw GethException::unexpectedResultType("eth_getTransactionByHash", "array", gettype($transaction));
         }
 
-        return $transaction;
+        return new Transaction($transaction);
     }
 
     /**
