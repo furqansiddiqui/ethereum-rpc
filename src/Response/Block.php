@@ -106,7 +106,7 @@ class Block
 
         foreach ($stringParams as $param) {
             $value = $obj[$param] ?? null;
-            if (!is_string($value) || !preg_match('/0x[a-f0-9]{1,}/i', $param)) {
+            if (!is_string($value) || !preg_match('/^0x[a-f0-9]{1,}$/i', $value)) {
                 throw $this->unexpectedParamValue($param, "string", gettype($value));
             }
 
@@ -149,7 +149,7 @@ class Block
         }
 
         if ($got) {
-            $message .= sprintf(', get "%s"', $got);
+            $message .= sprintf(', got "%s"', $got);
         }
 
 
