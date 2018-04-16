@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace EthereumRPC;
 
+use EthereumRPC\API\Eth;
+use EthereumRPC\API\Personal;
 use EthereumRPC\Exception\ConnectionException;
 use EthereumRPC\Exception\GethException;
 use HttpClient\Exception\ResponseException;

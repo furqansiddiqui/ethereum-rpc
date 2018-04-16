@@ -12,14 +12,15 @@
 
 declare(strict_types=1);
 
-namespace EthereumRPC;
+namespace EthereumRPC\API;
 
+use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use HttpClient\Response\JSONResponse;
 
 /**
  * Class Personal
- * @package EthereumRPC
+ * @package EthereumRPC\API
  */
 class Personal
 {
@@ -39,8 +40,8 @@ class Personal
      * @param string $command
      * @param array|null $params
      * @return JSONResponse
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     private function accountsRPC(string $command, ?array $params = null): JSONResponse
@@ -51,8 +52,8 @@ class Personal
     /**
      * @param string $password
      * @return string
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function newAccount(string $password): string
@@ -74,8 +75,8 @@ class Personal
      * @param string $ethAmount
      * @param string $password
      * @return string
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function sendEthereum(string $from, string $to, string $ethAmount, string $password): string

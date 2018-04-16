@@ -12,13 +12,14 @@
 
 declare(strict_types=1);
 
-namespace EthereumRPC;
+namespace EthereumRPC\API;
 
+use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 
 /**
  * Class Eth
- * @package EthereumRPC
+ * @package EthereumRPC\API
  */
 class Eth
 {
@@ -36,8 +37,8 @@ class Eth
 
     /**
      * @return int
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function blockNumber(): int
@@ -51,11 +52,10 @@ class Eth
         return hexdec($blockNumber);
     }
 
-
     /**
      * @return array
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function accounts(): array
@@ -70,11 +70,9 @@ class Eth
     }
 
     /**
-     * Alias of accounts() method
-     *
      * @return array
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function list(): array
@@ -83,10 +81,29 @@ class Eth
     }
 
     /**
+     * @param int $number
+     * @return mixed|null
+     * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function getBlock(int $number)
+    {
+        $blockHex = '0x' . dechex($number);
+        $request = $this->client->jsonRPC("eth_getBlockByNumber", null, [$blockHex, false]);
+        $block = $request->get("result");
+        if (!is_array($block)) {
+            throw GethException::unexpectedResultType("eth_getBlockByNumber", "object", gettype($block));
+        }
+
+        return $block;
+    }
+
+    /**
      * @param string $txId
      * @return array
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function getTransaction(string $txId): array
@@ -104,8 +121,8 @@ class Eth
      * @param string $account
      * @param string $scope
      * @return string
-     * @throws Exception\ConnectionException
      * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \HttpClient\Exception\HttpClientException
      */
     public function getBalance(string $account, string $scope = "latest"): string
