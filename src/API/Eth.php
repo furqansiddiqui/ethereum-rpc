@@ -89,11 +89,15 @@ class Eth
      * @throws \EthereumRPC\Exception\ResponseObjectException
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function getBlock(int $number): Block
+    public function getBlock(?int $number = null): ?Block
     {
-        $blockHex = '0x' . dechex($number);
+        $blockHex = $number ? '0x' . dechex($number) : "latest";
         $request = $this->client->jsonRPC("eth_getBlockByNumber", null, [$blockHex, false]);
         $block = $request->get("result");
+        if (is_null($block)) {
+            return null; // Block not found
+        }
+
         if (!is_array($block)) {
             throw GethException::unexpectedResultType("eth_getBlockByNumber", "object", gettype($block));
         }
