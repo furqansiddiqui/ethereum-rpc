@@ -16,6 +16,7 @@ namespace EthereumRPC\API;
 
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
+use EthereumRPC\Response\Block;
 
 /**
  * Class Eth
@@ -82,12 +83,13 @@ class Eth
 
     /**
      * @param int $number
-     * @return mixed|null
+     * @return Block
      * @throws GethException
      * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ResponseObjectException
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function getBlock(int $number)
+    public function getBlock(int $number): Block
     {
         $blockHex = '0x' . dechex($number);
         $request = $this->client->jsonRPC("eth_getBlockByNumber", null, [$blockHex, false]);
@@ -96,7 +98,7 @@ class Eth
             throw GethException::unexpectedResultType("eth_getBlockByNumber", "object", gettype($block));
         }
 
-        return $block;
+        return new Block($block);
     }
 
     /**
