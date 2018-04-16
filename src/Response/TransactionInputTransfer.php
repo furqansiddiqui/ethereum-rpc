@@ -20,7 +20,7 @@ use EthereumRPC\Exception\ResponseObjectException;
  * Class TransactionInput
  * @package EthereumRPC\Response
  */
-class TransactionInputTransfer
+class TransactionInputTransfer implements TransactionInputInterface
 {
     /** @var string */
     public $payee;
