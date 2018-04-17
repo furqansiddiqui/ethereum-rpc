@@ -17,7 +17,6 @@ namespace EthereumRPC;
 use EthereumRPC\API\Eth;
 use EthereumRPC\API\Personal;
 use EthereumRPC\Contracts\Constructor;
-use EthereumRPC\Contracts\ERC20\ERC20_Token;
 use EthereumRPC\Exception\ConnectionException;
 use EthereumRPC\Exception\GethException;
 use HttpClient\Exception\ResponseException;
@@ -81,18 +80,6 @@ class EthereumRPC
     public function contract(): Constructor
     {
         return new Constructor($this);
-    }
-
-    /**
-     * @param string $address
-     * @return ERC20_Token
-     * @throws Exception\ContractsException
-     */
-    public function erc20(string $address): ERC20_Token
-    {
-        $abiPath = sprintf('%1$s%2$sContracts%2$sERC20%2$sERC20.json', __DIR__, DIRECTORY_SEPARATOR);
-        $constructor = $this->contract()->load($abiPath);
-        return new ERC20_Token($this, $constructor->abi(), $address);
     }
 
     /**

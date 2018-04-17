@@ -138,4 +138,56 @@ class ABI
         $encodedMethodCall = Keccak::hash(sprintf('%s(%s)', $method->name, implode(",", $methodParamsTypes)), 256);
         return '0x' . substr($encodedMethodCall, 0, 8) . $encoded;
     }
+
+    /**
+     * @param string $name
+     * @param string $encoded
+     * @return array
+     * @throws ContractABIException
+     */
+    public function decodeResponse(string $name, string $encoded): array
+    {
+        $method = $this->functions[$name] ?? null;
+        if (!$method instanceof Method) {
+            throw new ContractABIException(sprintf('Calling method "%s" is undefined in ABI', $name));
+        }
+
+        // Remove suffix "0x"
+        if (substr($encoded, 0, 2) === '0x') {
+            $encoded = substr($encoded, 2);
+        }
+
+
+        // Output params
+        $methodResponseParams = $method->outputs ?? [];
+        $methodResponseParamsCount = count($methodResponseParams);
+
+        // What to expect
+        if ($methodResponseParamsCount <= 0) {
+            return [];
+        } elseif ($methodResponseParamsCount === 1) {
+            // Put all in a single chunk
+            $chunks = [$encoded];
+        } else {
+            // Split in chunks of 64 bytes
+            $chunks = str_split($encoded, 64);
+        }
+
+
+        $result = []; // Prepare
+        for ($i = 0; $i < $methodResponseParamsCount; $i++) {
+            /** @var MethodParam $param */
+            $param = $methodResponseParams[$i];
+            $chunk = $chunks[$i];
+            $decoded = DataTypes::Decode($param->type, $chunk);
+
+            if ($param->name) {
+                $result[$param->name] = $decoded;
+            } else {
+                $result[] = $decoded;
+            }
+        }
+
+        return $result;
+    }
 }

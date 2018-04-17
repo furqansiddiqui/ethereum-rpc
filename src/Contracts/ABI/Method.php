@@ -145,7 +145,7 @@ class Method
             $index++;
         }
 
-        return $params;
+        return $result;
     }
 
     /**

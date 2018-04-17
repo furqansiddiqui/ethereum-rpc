@@ -23,7 +23,7 @@ use EthereumRPC\Validator;
  * Class Contract
  *
  * Ideally this class should be extended instead of using directly, therefore no magic methods are coded,
- * see our ERC20 token implementation for an example
+ * see our ERC20 token implementation for an example (https://github.com/furqansiddiqui/erc20-php)
  *
  * @package EthereumRPC\Contracts
  */
@@ -56,29 +56,34 @@ class Contract
 
     /**
      * @param string $func
-     * @param array|null $params
-     * @return string
+     * @param array|null $args
+     * @param bool $rawOutput
+     * @param string $block
+     * @return array|mixed|null
      * @throws GethException
      * @throws \EthereumRPC\Exception\ConnectionException
      * @throws \EthereumRPC\Exception\ContractABIException
      * @throws \Exception
      * @throws \HttpClient\Exception\HttpClientException
      */
-    public function call(string $func, ?array $params = null): string
+    public function call(string $func, ?array $args = null, bool $rawOutput = false, string $block = "latest")
     {
-        $data = $this->abi->encodeCall($func, $params);
-        $requestParams = [
+        $data = $this->abi->encodeCall($func, $args);
+        $params = [
             "to" => $this->address,
-            "data" => $data,
-            "block" => "latest"
+            "data" => $data
         ];
 
-        $request = $this->client->jsonRPC("eth_call", null, $requestParams);
+        $request = $this->client->jsonRPC("eth_call", null, [$params, $block]);
         $res = $request->get("result");
         if (!is_string($res)) {
             throw GethException::unexpectedResultType("eth_call", "string", gettype($res));
         }
 
-        return $res;
+        if ($rawOutput) { // Raw output? return response as-is?
+            return $res;
+        }
+
+        return $this->abi->decodeResponse($func, $res);
     }
 }
