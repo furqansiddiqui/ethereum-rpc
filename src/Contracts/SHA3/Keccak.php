@@ -11,7 +11,7 @@
  */
 
 /**
- * This file has been included to for SHA3 compatibility from https://github.com/kornrunner/php-keccak
+ * This file has been included for SHA3 compatibility from https://github.com/kornrunner/php-keccak
  * LICENSE of original author (Boris Momčilović) is included as below:
  */
 
