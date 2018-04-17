@@ -41,7 +41,7 @@
 
 declare(strict_types=1);
 
-namespace EthereumRPC\Contracts\SHA3;
+namespace EthereumRPC\Contracts\ABI\SHA3;
 
 /**
  * Class Keccak
