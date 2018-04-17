@@ -14,7 +14,10 @@ declare(strict_types=1);
 
 namespace EthereumRPC\Contracts;
 
+use EthereumRPC\Contracts\ABI\DataTypes;
 use EthereumRPC\Contracts\ABI\Method;
+use EthereumRPC\Contracts\ABI\MethodParam;
+use EthereumRPC\Contracts\ABI\SHA3\Keccak;
 use EthereumRPC\Exception\ContractABIException;
 
 /**
@@ -33,12 +36,16 @@ class ABI
     /** @var array */
     private $events;
 
+    /** @var bool */
+    private $strictMode;
+
     /**
      * ABI constructor.
      * @param array $abi
      */
     public function __construct(array $abi)
     {
+        $this->strictMode = true;
         $this->functions = [];
         $this->events = [];
 
@@ -85,5 +92,50 @@ class ABI
 
             $index++;
         }
+    }
+
+    /**
+     * @param string $name
+     * @param array|null $args
+     * @return string
+     * @throws ContractABIException
+     * @throws \Exception
+     */
+    public function encodeCall(string $name, ?array $args): string
+    {
+        $method = $this->functions[$name] ?? null;
+        if (!$method instanceof Method) {
+            throw new ContractABIException(sprintf('Calling method "%s" is undefined in ABI', $name));
+        }
+
+        $givenArgs = $args;
+        $givenArgsCount = is_array($givenArgs) ? count($givenArgs) : 0;
+        $methodParams = $method->inputs;
+        $methodParamsCount = is_array($methodParams) ? count($methodParams) : 0;
+
+        // Strict mode
+        if ($this->strictMode) {
+            // Params/args count must match
+            if ($methodParamsCount || $givenArgsCount) {
+                if ($methodParamsCount !== $givenArgsCount) {
+                    throw new ContractABIException(
+                        sprintf('Method "%s" requires %d args, given %d', $methodParamsCount, $givenArgsCount)
+                    );
+                }
+            }
+        }
+
+        $encoded = "";
+        $methodParamsTypes = [];
+        for ($i = 0; $i < $methodParamsCount; $i++) {
+            /** @var MethodParam $param */
+            $param = $methodParams[$i];
+            $arg = $givenArgs[$i];
+            $encoded .= DataTypes::Encode($param->type, $arg);
+            $methodParamsTypes[] = $param->type;
+        }
+
+        $encodedMethodCall = Keccak::hash(sprintf('%s(%s)', $method->name, implode(",", $methodParamsTypes)), 256);
+        return '0x' . substr($encodedMethodCall, 0, 8) . $encoded;
     }
 }
