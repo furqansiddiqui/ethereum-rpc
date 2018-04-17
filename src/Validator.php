@@ -21,11 +21,11 @@ namespace EthereumRPC;
 class Validator
 {
     /**
-     * @param string $addr
+     * @param $addr
      * @return bool
      */
-    public static function Address(string $addr): bool
+    public static function Address($addr): bool
     {
-        return preg_match('/^0x[a-f0-9]{40}$/i', $addr) ? true : false;
+        return (is_string($addr) && preg_match('/^0x[a-f0-9]{40}$/i', $addr)) ? true : false;
     }
 }
