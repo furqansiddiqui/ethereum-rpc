@@ -16,10 +16,15 @@ namespace EthereumRPC\Contracts;
 
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\ContractsException;
+use EthereumRPC\Exception\GethException;
 use EthereumRPC\Validator;
 
 /**
  * Class Contract
+ *
+ * Ideally this class should be extended instead of using directly, therefore no magic methods are coded,
+ * see our ERC20 token implementation for an example
+ *
  * @package EthereumRPC\Contracts
  */
 class Contract
@@ -47,5 +52,33 @@ class Contract
         $this->client = $client;
         $this->abi = $abi;
         $this->address = $addr;
+    }
+
+    /**
+     * @param string $func
+     * @param array|null $params
+     * @return string
+     * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \EthereumRPC\Exception\ContractABIException
+     * @throws \Exception
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function call(string $func, ?array $params = null): string
+    {
+        $data = $this->abi->encodeCall($func, $params);
+        $requestParams = [
+            "to" => $this->address,
+            "data" => $data,
+            "block" => "latest"
+        ];
+
+        $request = $this->client->jsonRPC("eth_call", null, $requestParams);
+        $res = $request->get("result");
+        if (!is_string($res)) {
+            throw GethException::unexpectedResultType("eth_call", "string", gettype($res));
+        }
+
+        return $res;
     }
 }

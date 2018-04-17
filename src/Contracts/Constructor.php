@@ -48,6 +48,19 @@ class Constructor
     }
 
     /**
+     * @return ABI
+     * @throws ContractsException
+     */
+    public function abi(): ABI
+    {
+        if (!$this->abi) {
+            throw new ContractsException('Contract ABI is not defined');
+        }
+
+        return $this->abi;
+    }
+
+    /**
      * @param string $abiPath
      * @return Constructor
      * @throws ContractsException
@@ -80,10 +93,6 @@ class Constructor
      */
     public function address(string $addr): Contract
     {
-        if (!$this->abi) {
-            throw new ContractsException('Contract ABI is not defined');
-        }
-
-        return new Contract($this->client, $this->abi, $addr);
+        return new Contract($this->client, $this->abi(), $addr);
     }
 }
