@@ -106,7 +106,7 @@ class Block
 
         foreach ($stringParams as $param) {
             $value = $obj[$param] ?? null;
-            if (!is_string($value) || !preg_match('/^0x[a-f0-9]{1,}$/i', $value)) {
+            if (!is_string($value) || !preg_match('/^0x[a-f0-9]*$/i', $value)) {
                 throw $this->unexpectedParamValue($param, "string", gettype($value));
             }
 
