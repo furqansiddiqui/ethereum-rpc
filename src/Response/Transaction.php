@@ -73,12 +73,18 @@ class Transaction
         // From and To
         $this->from = $obj["from"] ?? null;
         if (!is_string($this->from) || !preg_match('/^0x[a-f0-9]{40}$/i', $this->from)) {
-            throw $this->unexpectedParamValue("from", "hash");
+            throw $this->unexpectedParamValue("from", "address");
         }
 
         $this->to = $obj["to"] ?? null;
-        if (!is_string($this->to) || !preg_match('/^0x[a-f0-9]{40}$/i', $this->to)) {
-            throw $this->unexpectedParamValue("to", "hash");
+        if(is_string($this->to)) {
+            if(!preg_match('/^0x[a-f0-9]{40}$/i', $this->to)) {
+                throw $this->unexpectedParamValue("to", "address");
+            }
+        }
+
+        if(!is_string($this->to) && !is_null($this->to)) {
+            throw $this->unexpectedParamValue("to", "null|address");
         }
 
         // Input
