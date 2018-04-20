@@ -78,7 +78,7 @@ class Transaction
 
         $this->to = $obj["to"] ?? null;
         if (!is_string($this->to) || !preg_match('/^0x[a-f0-9]{40}$/i', $this->to)) {
-            throw $this->unexpectedParamValue("from", "hash");
+            throw $this->unexpectedParamValue("to", "hash");
         }
 
         // Input
