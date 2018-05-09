@@ -28,4 +28,23 @@ class Validator
     {
         return (is_string($addr) && preg_match('/^0x[a-f0-9]{40}$/i', $addr)) ? true : false;
     }
+
+    /**
+     * @param $amount
+     * @param bool $signed
+     * @return bool
+     */
+    public static function BcAmount($amount, bool $signed = false): bool
+    {
+        if (!is_string($amount)) {
+            return false;
+        }
+
+        $pattern = '[0-9]+(\.[0-9]+)?';
+        if ($signed) {
+            $pattern = '\-' . $pattern;
+        }
+
+        return preg_match('/^' . $pattern . '$/', $amount) ? true : false;
+    }
 }
