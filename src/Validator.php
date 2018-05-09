@@ -42,7 +42,7 @@ class Validator
 
         $pattern = '[0-9]+(\.[0-9]+)?';
         if ($signed) {
-            $pattern = '\-' . $pattern;
+            $pattern = '\-?' . $pattern;
         }
 
         return preg_match('/^' . $pattern . '$/', $amount) ? true : false;
