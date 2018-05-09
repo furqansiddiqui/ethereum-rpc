@@ -55,6 +55,14 @@ class Contract
     }
 
     /**
+     * @return ABI
+     */
+    public function abi(): ABI
+    {
+        return $this->abi;
+    }
+
+    /**
      * @param string $func
      * @param array|null $args
      * @param bool $rawOutput
