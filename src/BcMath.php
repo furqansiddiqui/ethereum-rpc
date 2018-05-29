@@ -21,18 +21,17 @@ namespace EthereumRPC;
 class BcMath
 {
     /**
-     * @param $hex
-     * @return int|float|string
+     * @param string $hex
+     * @return string
      */
     public static function HexDec(string $hex): string
     {
-        if (strlen($hex) == 1) {
-            return strval(hexdec($hex));
-        } else {
-            $remain = substr($hex, 0, -1);
-            $last = substr($hex, -1);
-            return bcadd(bcmul(16, self::HexDec($remain)), hexdec($last));
+        $dec = 0;
+        $len = strlen($hex);
+        for ($i = 1; $i <= $len; $i++) {
+            $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
         }
+        return $dec;
     }
 
     /**
