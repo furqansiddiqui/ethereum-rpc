@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace EthereumRPC\Contracts\ABI;
 
+use EthereumRPC\BcMath;
 use EthereumRPC\Exception\ContractABIException;
 use EthereumRPC\Validator;
 
@@ -79,7 +80,7 @@ class DataTypes
                 break;
             case "uint":
             case "int":
-                $value = dechex(intval($value));
+                $value = BcMath::DecHex($value);
                 break;
             case "bool":
                 $value = $value === true ? 1 : 0;
@@ -115,7 +116,7 @@ class DataTypes
                 return '0x' . $encoded;
             case "uint":
             case "int":
-                return hexdec($encoded);
+                return BcMath::HexDec($encoded);
             case "bool":
                 return boolval($encoded);
             case "string":
