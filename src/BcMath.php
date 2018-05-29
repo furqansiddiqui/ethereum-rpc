@@ -24,7 +24,7 @@ class BcMath
      * @param $hex
      * @return string
      */
-    public static function HexDec($hex): string
+    public static function HexDec($hex)
     {
         if (strlen($hex) == 1) {
             return strval(hexdec($hex));
@@ -39,7 +39,7 @@ class BcMath
      * @param $dec
      * @return string
      */
-    public static function DecHex($dec): string
+    public static function DecHex($dec)
     {
         $last = bcmod($dec, 16);
         $remain = bcdiv(bcsub($dec, $last), 16);
