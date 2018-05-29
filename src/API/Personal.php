@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace EthereumRPC\API;
 
+use EthereumRPC\API\Personal\RawTransaction;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use HttpClient\Response\JSONResponse;
@@ -86,6 +87,54 @@ class Personal
             "to" => $to,
             "value" => "0x" . dechex(intval(bcmul($ethAmount, bcpow("10", "18"), 0))) // Convert ETH to WEI
         ];
+
+        $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
+        $send = $request->get("result");
+        if (!is_string($send)) {
+            throw GethException::unexpectedResultType("personal_sendTransaction", "string", gettype($send));
+        }
+
+        return $send;
+    }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @return RawTransaction
+     * @throws \EthereumRPC\Exception\RawTransactionException
+     */
+    public function transaction(string $from, string $to): RawTransaction
+    {
+        return new RawTransaction($this, $from, $to);
+    }
+
+    /**
+     * @param RawTransaction $tx
+     * @param string $password
+     * @return string
+     * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function send(RawTransaction $tx, string $password): string
+    {
+        // Required params
+        $transaction = [
+            "from" => $tx->from,
+            "to" => $tx->to,
+            "value" => $tx->value
+        ];
+
+        // Optional params
+        if ($tx->data) {
+            $transaction["data"] = $tx->data;
+        }
+
+        // Optional gas params
+        if ($tx->gas && $tx->gasPrice) {
+            $transaction["gas"] = $tx->gas;
+            $transaction["gasPrice"] = $tx->gasPrice;
+        }
 
         $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
         $send = $request->get("result");
