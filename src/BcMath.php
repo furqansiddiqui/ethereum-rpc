@@ -22,7 +22,7 @@ class BcMath
 {
     /**
      * @param $hex
-     * @return string
+     * @return int|float|string
      */
     public static function HexDec($hex)
     {
