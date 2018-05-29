@@ -118,6 +118,21 @@ class RawTransaction
     }
 
     /**
+     * @param string $payee
+     * @return RawTransaction
+     * @throws RawTransactionException
+     */
+    public function to(string $payee): self
+    {
+        if (!Validator::Address($payee)) {
+            throw new RawTransactionException('Invalid "to" Ethereum address');
+        }
+
+        $this->to = $payee;
+        return $this;
+    }
+
+    /**
      * NOTE: use of this method is untested
      *
      * @param int $limit
