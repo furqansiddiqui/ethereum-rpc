@@ -50,11 +50,11 @@ class TransactionReceipt
     public function __construct(array $obj)
     {
         $this->transactionHash = strval($obj["transactionHash"] ?? "");
-        $this->transactionIndex = intval($obj["transactionIndex"] ?? 0);
+        $this->transactionIndex = strval($obj["transactionIndex"] ?? 0);
         $this->blockHash = strval($obj["blockHash"] ?? "");
-        $this->blockNumber = intval($obj["blockNumber"] ?? 0);
-        $this->cumulativeGasUsed = intval($obj["cumulativeGasUsed"] ?? 0);
-        $this->gasUsed = intval($obj["gasUsed"] ?? 0);
+        $this->blockNumber = strval($obj["blockNumber"] ?? 0);
+        $this->cumulativeGasUsed = strval($obj["cumulativeGasUsed"] ?? 0);
+        $this->gasUsed = strval($obj["gasUsed"] ?? 0);
         $this->contractAddress = isset($obj["contractAddress"]) ? strval($obj["contractAddress"]) : null;
         $this->logs = isset($obj["logs"]) && is_array($obj["logs"]) ? $obj["contractAddress"] : null;
         $this->root = isset($obj["root"]) ? strval($obj["root"]) : null;
