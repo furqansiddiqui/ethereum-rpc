@@ -77,13 +77,13 @@ class Transaction
         }
 
         $this->to = $obj["to"] ?? null;
-        if(is_string($this->to)) {
-            if(!preg_match('/^0x[a-f0-9]{40}$/i', $this->to)) {
+        if (is_string($this->to)) {
+            if (!preg_match('/^0x[a-f0-9]{40}$/i', $this->to)) {
                 throw $this->unexpectedParamValue("to", "address");
             }
         }
 
-        if(!is_string($this->to) && !is_null($this->to)) {
+        if (!is_string($this->to) && !is_null($this->to)) {
             throw $this->unexpectedParamValue("to", "null|address");
         }
 

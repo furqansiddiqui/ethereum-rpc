@@ -18,6 +18,7 @@ use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use EthereumRPC\Response\Block;
 use EthereumRPC\Response\Transaction;
+use EthereumRPC\Response\TransactionReceipt;
 
 /**
  * Class Eth
@@ -123,6 +124,24 @@ class Eth
         }
 
         return new Transaction($transaction);
+    }
+
+    /**
+     * @param string $txId
+     * @return TransactionReceipt
+     * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function getTransactionReceipt(string $txId): TransactionReceipt
+    {
+        $request = $this->client->jsonRPC("eth_getTransactionReceipt", null, [$txId]);
+        $receipt = $request->get("result");
+        if (!is_array($receipt)) {
+            throw GethException::unexpectedResultType("getTransactionReceipt", "array", gettype($receipt));
+        }
+
+        return new TransactionReceipt($receipt);
     }
 
     /**
