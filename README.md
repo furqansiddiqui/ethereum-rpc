@@ -1,3 +1,5 @@
+forked from [furqansiddiqui/ethereum-rpc](https://github.com/furqansiddiqui/ethereum-rpc)
+
 # ethereum-rpc
 
 Ethereum (geth) RPC client
@@ -9,4 +11,4 @@ Ethereum (geth) RPC client
 
 ## Installation
 
-`composer require furqansiddiqui/ethereum-rpc`
+`composer require lidelin/ethereum-rpc`
