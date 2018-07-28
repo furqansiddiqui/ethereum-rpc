@@ -160,7 +160,7 @@ class Eth
             throw GethException::unexpectedResultType("eth_getBalance", "hexdec", gettype($balance));
         }
 
-        $balance = strval(hexdec($balance));
+        $balance = strval(base_convert($balance, 16, 10));
         return bcdiv($balance, bcpow("10", "18", 0), EthereumRPC::SCALE);
     }
 }

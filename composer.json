@@ -1,5 +1,5 @@
 {
-  "name": "furqansiddiqui/ethereum-rpc",
+  "name": "lidelin/ethereum-rpc",
   "type": "library",
   "description": "Ethereum (geth) RPC client",
   "keywords": ["ethereum", "geth", "ethereum-go", "eth"],
