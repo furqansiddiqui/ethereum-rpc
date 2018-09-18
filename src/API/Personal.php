@@ -133,7 +133,7 @@ class Personal
         // Optional gas params
         if ($tx->gas && $tx->gasPrice) {
             $transaction["gas"] = $tx->gas;
-            $transaction["gasPrice"] = $tx->gasPrice;
+            $transaction["gasPrice"] = intval(bcmul($tx->gasPrice, bcpow(10, 18, 0), 0));
         }
 
         $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
