@@ -19,6 +19,7 @@ use EthereumRPC\Exception\GethException;
 use EthereumRPC\Response\Block;
 use EthereumRPC\Response\Transaction;
 use EthereumRPC\Response\TransactionReceipt;
+use EthereumRPC\BcMath;
 
 /**
  * Class Eth
@@ -162,5 +163,33 @@ class Eth
 
         $balance = strval(hexdec($balance));
         return bcdiv($balance, bcpow("10", "18", 0), EthereumRPC::SCALE);
+    }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @param string $ethAmount
+     * @return string
+     * @throws GethException
+     * @throws \EthereumRPC\Exception\ConnectionException
+     * @throws \HttpClient\Exception\HttpClientException
+     */
+    public function sendTransaction(string $from, string $to, string $ethAmount): string
+    {
+        $value = "0x" . BcMath::DecHex(bcmul($ethAmount, bcpow("10", "18"), 0));
+
+        $transaction = [
+            "from" => $from,
+            "to" => $to,
+            "value" => $value
+        ];
+
+        $request = $this->client->jsonRPC("eth_sendTransaction", null, [$transaction]);
+        $send = $request->get("result");
+        if (!is_string($send)) {
+            throw GethException::unexpectedResultType("eth_sendTransaction", "string", gettype($send));
+        }
+
+        return $send;
     }
 }
