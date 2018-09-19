@@ -34,22 +34,25 @@ class EthereumRPC
 
     /** @var string */
     private $host;
+
     /** @var int */
     private $port;
+
     /** @var bool */
     private $ssl;
 
     /** @var Eth */
     private $eth;
+    
     /** @var Personal */
     private $personal;
 
     /**
-     * Ethereum constructor.
+     * EthereumRPC constructor.
      * @param string $host
-     * @param int $port
+     * @param int|null $port
      */
-    public function __construct(string $host, int $port)
+    public function __construct(string $host, ?int $port = null)
     {
         $this->host = $host;
         $this->port = $port;
@@ -89,7 +92,12 @@ class EthereumRPC
     private function url(?string $endPoint = null): string
     {
         $protocol = $this->ssl ? "https" : "http";
-        return sprintf('%s://%s:%s%s', $protocol, $this->host, $this->port, $endPoint);
+
+        if ($this->port) {
+            return sprintf('%s://%s:%s%s', $protocol, $this->host, $this->port, $endPoint);
+        }
+
+        return sprintf('%s://%s%s', $protocol, $this->host, $endPoint);
     }
 
     /**
