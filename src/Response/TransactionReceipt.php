@@ -56,7 +56,7 @@ class TransactionReceipt
         $this->cumulativeGasUsed = strval($obj["cumulativeGasUsed"] ?? 0);
         $this->gasUsed = strval($obj["gasUsed"] ?? 0);
         $this->contractAddress = isset($obj["contractAddress"]) ? strval($obj["contractAddress"]) : null;
-        $this->logs = isset($obj["logs"]) && is_array($obj["logs"]) ? $obj["contractAddress"] : null;
+        $this->logs = isset($obj["logs"]) && is_array($obj["logs"]) ? $obj["logs"] : null;
         $this->root = isset($obj["root"]) ? strval($obj["root"]) : null;
         $this->status = isset($obj["status"]) ? strval($obj["status"]) : null;
     }
