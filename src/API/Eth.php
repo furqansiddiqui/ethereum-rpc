@@ -20,7 +20,6 @@ use EthereumRPC\Exception\GethException;
 use EthereumRPC\Response\Block;
 use EthereumRPC\Response\Transaction;
 use EthereumRPC\Response\TransactionReceipt;
-use EthereumRPC\BcMath;
 
 /**
  * Class Eth
