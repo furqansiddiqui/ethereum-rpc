@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace EthereumRPC\API;
 
+use EthereumRPC\BcMath;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use EthereumRPC\Response\Block;
@@ -160,7 +161,7 @@ class Eth
             throw GethException::unexpectedResultType("eth_getBalance", "hexdec", gettype($balance));
         }
 
-        $balance = strval(hexdec($balance));
+        $balance = strval(BcMath::HexDec($balance));
         return bcdiv($balance, bcpow("10", "18", 0), EthereumRPC::SCALE);
     }
 }
