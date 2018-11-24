@@ -18,6 +18,7 @@ use EthereumRPC\API\Personal\RawTransaction;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
 use HttpClient\Response\JSONResponse;
+use EthereumRPC\BcMath;
 
 /**
  * Class Personal
@@ -85,7 +86,7 @@ class Personal
         $transaction = [
             "from" => $from,
             "to" => $to,
-            "value" => "0x" . dechex(intval(bcmul($ethAmount, bcpow("10", "18"), 0))) // Convert ETH to WEI
+            "value" => "0x" . BcMath::DecHex(bcmul($ethAmount, bcpow("10", "18"), 0)) // Convert ETH to WEI
         ];
 
         $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
@@ -132,8 +133,8 @@ class Personal
 
         // Optional gas params
         if ($tx->gas && $tx->gasPrice) {
-            $transaction["gas"] = $tx->gas;
-            $transaction["gasPrice"] = intval(bcmul($tx->gasPrice, bcpow(10, 18, 0), 0));
+            $transaction["gas"] = "0x" . dechex($tx->gas);
+            $transaction["gasPrice"] = "0x" . dechex(bcmul($tx->gasPrice, bcpow("10", "18", 0), 0));
         }
 
         $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);
