@@ -17,6 +17,7 @@ namespace EthereumRPC\API\Personal;
 use EthereumRPC\API\Personal;
 use EthereumRPC\Exception\RawTransactionException;
 use EthereumRPC\Validator;
+use EthereumRPC\BcMath;
 
 /**
  * Class RawTransaction
@@ -80,7 +81,7 @@ class RawTransaction
             case "to":
                 return $this->to;
             case "value":
-                return "0x" . dechex(intval(bcmul($this->value ?? "0", bcpow("10", "18"), 0))); // Convert ETH to WEI
+                return "0x" . BcMath::DecHex(bcmul($this->value ?? "0", bcpow("10", "18"), 0)); // Convert ETH to WEI
             case "data":
                 return $this->data;
             case "gas":
