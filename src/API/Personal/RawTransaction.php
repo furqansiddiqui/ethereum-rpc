@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace EthereumRPC\API\Personal;
 
 use EthereumRPC\API\Personal;
+use EthereumRPC\BcMath;
 use EthereumRPC\Exception\RawTransactionException;
 use EthereumRPC\Validator;
 
@@ -80,7 +81,7 @@ class RawTransaction
             case "to":
                 return $this->to;
             case "value":
-                return "0x" . dechex(intval(bcmul($this->value ?? "0", bcpow("10", "18"), 0))); // Convert ETH to WEI
+                return "0x" . BcMath::DecHex(bcmul($this->value ?? "0", bcpow("10", "18"), 0)); // Convert ETH to WEI
             case "data":
                 return $this->data;
             case "gas":
@@ -133,21 +134,25 @@ class RawTransaction
     }
 
     /**
-     * NOTE: use of this method is untested
-     *
-     * @param int $limit
-     * @param string $gasPriceETH
+     * @param int|null $limit
+     * @param string|null $gasPriceETH
      * @return RawTransaction
      * @throws RawTransactionException
      */
-    public function gas(int $limit, string $gasPriceETH): self
+    public function gas(?int $limit = null, ?string $gasPriceETH = null): self
     {
-        if (!Validator::BcAmount($gasPriceETH)) {
-            throw new RawTransactionException('Invalid price per gas in ETH');
+        if ($limit) {
+            $this->gas = $limit;
         }
 
-        $this->gas = $limit;
-        $this->gasPrice = $gasPriceETH;
+        if ($gasPriceETH) {
+            if (!Validator::BcAmount($gasPriceETH)) {
+                throw new RawTransactionException('Invalid price per gas in ETH');
+            }
+
+            $this->gasPrice = $gasPriceETH;
+        }
+
         return $this;
     }
 

@@ -15,8 +15,10 @@ declare(strict_types=1);
 namespace EthereumRPC\API;
 
 use EthereumRPC\API\Personal\RawTransaction;
+use EthereumRPC\BcMath;
 use EthereumRPC\EthereumRPC;
 use EthereumRPC\Exception\GethException;
+use EthereumRPC\Validator;
 use HttpClient\Response\JSONResponse;
 
 /**
@@ -131,9 +133,12 @@ class Personal
         }
 
         // Optional gas params
-        if ($tx->gas && $tx->gasPrice) {
-            $transaction["gas"] = $tx->gas;
-            $transaction["gasPrice"] = intval(bcmul($tx->gasPrice, bcpow(10, 18, 0), 0));
+        if ($tx->gas) {
+            $transaction["gas"] = "0x" . dechex($tx->gas);
+        }
+
+        if (is_string($tx->gasPrice) && Validator::BcAmount($tx->gasPrice)) {
+            $transaction["gasPrice"] = "0x" . BcMath::DecHex(bcmul($tx->gasPrice, bcpow("10", "18", 0), 0));
         }
 
         $request = $this->accountsRPC("personal_sendTransaction", [$transaction, $password]);

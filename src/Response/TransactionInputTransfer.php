@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace EthereumRPC\Response;
 
+use EthereumRPC\BcMath;
 use EthereumRPC\Exception\ResponseObjectException;
 
 /**
@@ -61,6 +62,6 @@ class TransactionInputTransfer implements TransactionInputInterface
      */
     public function wei(): string
     {
-        return number_format(hexdec($this->amount), 0, '.', '');
+        return number_format(BcMath::HexDec($this->amount), 0, '.', '');
     }
 }
