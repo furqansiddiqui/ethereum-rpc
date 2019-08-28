@@ -43,7 +43,7 @@ class EthereumRPC
 
     /** @var Eth */
     private $eth;
-    
+
     /** @var Personal */
     private $personal;
 
@@ -51,12 +51,13 @@ class EthereumRPC
      * EthereumRPC constructor.
      * @param string $host
      * @param int|null $port
+     * @param bool|null $ssl
      */
-    public function __construct(string $host, ?int $port = null)
+    public function __construct(string $host, ?int $port = null, ?bool $ssl = false)
     {
         $this->host = $host;
         $this->port = $port;
-        $this->ssl = false;
+        $this->ssl = $ssl;
         $this->eth = new Eth($this);
         $this->personal = new Personal($this);
     }
