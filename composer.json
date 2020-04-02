@@ -10,10 +10,10 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.1.0",
+    "php": "^7.1.0",
     "ext-bcmath": "*",
     "ext-json": "*",
-    "furqansiddiqui/http-client": "dev-master"
+    "furqansiddiqui/http-client": "^0.4.5"
   },
   "autoload": {
     "psr-4": {
