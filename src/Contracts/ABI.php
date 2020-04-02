@@ -3,7 +3,7 @@
  * This file is a part of "furqansiddiqui/ethereum-rpc" package.
  * https://github.com/furqansiddiqui/ethereum-rpc
  *
- * Copyright (c) 2018 Furqan A. Siddiqui <hello@furqansiddiqui.com>
+ * Copyright (c) 2020 Furqan A. Siddiqui <hello@furqansiddiqui.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code or visit following link:
@@ -119,7 +119,7 @@ class ABI
             if ($methodParamsCount || $givenArgsCount) {
                 if ($methodParamsCount !== $givenArgsCount) {
                     throw new ContractABIException(
-                        sprintf('Method "%s" requires %d args, given %d', $methodParamsCount, $givenArgsCount)
+                        sprintf('Method "%s" requires %d args, given %d', $name, $methodParamsCount, $givenArgsCount)
                     );
                 }
             }
