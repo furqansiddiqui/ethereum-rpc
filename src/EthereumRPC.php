@@ -37,6 +37,12 @@ class EthereumRPC
 
     /** @var int */
     private $port;
+    
+    /** @var int */
+    private $timeout;
+
+    /** @var int */
+    private $connectTimeout;
 
     /** @var bool */
     private $ssl;
@@ -125,6 +131,7 @@ class EthereumRPC
         $id = sprintf('%s_%d', $command, time());
         $request = new Request($method, $this->url($endpoint));
         $request->json(); // JSON request
+        $request->setTimeout($this->timeout, $this->connectTimeout);
 
         // Payload
         $request->payload([
@@ -173,5 +180,27 @@ class EthereumRPC
         }
 
         return $response;
+    }
+    
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setConnectTimeOut(int $connectTimeout)
+    {
+        $this->connectTimeout = $connectTimeout;
+
+        return $this;
     }
 }
